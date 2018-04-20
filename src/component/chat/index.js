@@ -2,6 +2,7 @@ import React from 'react'
 import { List, InputItem, NavBar, Icon, Grid } from 'antd-mobile'
 import { connect } from 'react-redux'
 import io from 'socket.io-client'
+import QueueAnim from 'rc-queue-anim'
 import {
   sendMessage,
   getMessageList,
@@ -82,23 +83,25 @@ class Chat extends React.Component {
         >
           {users[userid].name}
         </NavBar>
-        {chatMessages.map(v => {
-          const avatar = require(`../img/${users[v.from].avatar}.png`)
-          return v.from === userid ? (
-            <List key={v._id}>
-              <List.Item thumb={avatar}>{v.content}</List.Item>
-            </List>
-          ) : (
-            <List key={v._id}>
-              <List.Item
-                extra={<img src={avatar} alt="" />}
-                className="chat-me"
-              >
-                {v.content}
-              </List.Item>
-            </List>
-          )
-        })}
+        <QueueAnim delay={100}>
+          {chatMessages.map(v => {
+            const avatar = require(`../img/${users[v.from].avatar}.png`)
+            return v.from === userid ? (
+              <List key={v._id}>
+                <List.Item thumb={avatar}>{v.content}</List.Item>
+              </List>
+            ) : (
+              <List key={v._id}>
+                <List.Item
+                  extra={<img src={avatar} alt="" />}
+                  className="chat-me"
+                >
+                  {v.content}
+                </List.Item>
+              </List>
+            )
+          })}
+        </QueueAnim>
         <div className="stick-footer">
           <List>
             <InputItem
